@@ -1,11 +1,13 @@
 package webserver
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gmendonca/roboat/pkg/roboat"
 )
 
-type Webserver struct{
+type Webserver struct {
 	Port string
 }
 
@@ -19,27 +21,28 @@ func (webserver *Webserver) StartServer() {
 		})
 	})
 
-	api := router.Group("/api"){
-		api.POST("/github", handleGitHubRequests)
+	api := router.Group("/api")
+	{
+		api.POST("/github", webserver.HandleGitHubRequests)
 	}
-	
+
 	router.Run(webserver.Port)
 }
 
-func (webserver *Webserver) handleGitHubRequests(c *gin.Context) {
+func (webserver *Webserver) HandleGitHubRequests(c *gin.Context) {
 	if c.Request.Header.Get("X-GitHub-Event") == "issue_comment" {
-		var json GitHubIssueCommentPayload
-		if err:= c.BindJSON(&json}); err != nil {
+		var json roboat.GitHubIssueCommentPayload
+		if err := c.BindJSON(&json); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
 		if json.Action != "created" {
-			c.JSON(http.StatusOK, gin.H{"status:" "Skipping event"})
+			c.JSON(http.StatusOK, gin.H{"status": "Skipping event"})
 			return
 		}
 
-		if err := handleGitHubIssueCommentPayload(json); err != nil {
+		if err := webserver.HandleGitHubIssueCommentPayload(json); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -50,6 +53,6 @@ func (webserver *Webserver) handleGitHubRequests(c *gin.Context) {
 	}
 }
 
-func (webserver *Webserver) handleGitHubIssueCommentPayload(payload GitHubIssueCommentPayload) error {
-	
+func (webserver *Webserver) HandleGitHubIssueCommentPayload(payload roboat.GitHubIssueCommentPayload) error {
+	return nil
 }
