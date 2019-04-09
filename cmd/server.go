@@ -10,8 +10,9 @@ var serverCmd = &cobra.Command{
 	Short: "server command line interface",
 	Long:  `server, the command line interface`,
 	Run: func(cmd *cobra.Command, args []string) {
-		w := &webserver.WebServer{}
-
+		w := &webserver.Webserver{
+			Port: ":3000",
+		}
 		w.StartServer()
 	},
 }

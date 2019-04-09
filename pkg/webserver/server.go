@@ -1,12 +1,14 @@
 package webserver
 
 import "github.com/gin-gonic/gin"
-
+type Webserver struct{
+	Port string
+}
 //StartServer start a Gin Tonic Server to
-func StartServer() {
-	router = gin.Default()
+func (webserver *Webserver) StartServer() {
+	router := gin.Default()
 
-	api := router.Group("/api")
+	// api := router.Group("/api")
 
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -14,5 +16,5 @@ func StartServer() {
 		})
 	})
 
-	webserver.Server.Run()
+	router.Run(webserver.Port)
 }
