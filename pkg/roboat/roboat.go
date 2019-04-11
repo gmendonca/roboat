@@ -45,7 +45,5 @@ type GitHubIssueCommentPayload struct {
 
 type Roboat struct {
 	GitHubToken string
-	BotName string
+	BotName     string
 }
-
-

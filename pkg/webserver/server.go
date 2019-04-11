@@ -7,6 +7,7 @@ import (
 	"github.com/gmendonca/roboat/pkg/roboat"
 )
 
+// Webserver struct
 type Webserver struct {
 	Port string
 }
@@ -23,13 +24,14 @@ func (webserver *Webserver) StartServer() {
 
 	api := router.Group("/api")
 	{
-		api.POST("/github", webserver.HandleGitHubRequests)
+		api.POST("/github", webserver.HandleGitHubIssueCommentRequests)
 	}
 
 	router.Run(webserver.Port)
 }
 
-func (webserver *Webserver) HandleGitHubRequests(c *gin.Context) {
+// HandleGitHubIssueCommentRequests handles requests from GitHub Issue Comment Requests
+func (webserver *Webserver) HandleGitHubIssueCommentRequests(c *gin.Context) {
 	if c.Request.Header.Get("X-GitHub-Event") == "issue_comment" {
 		var json roboat.GitHubIssueCommentPayload
 		if err := c.BindJSON(&json); err != nil {
@@ -54,5 +56,6 @@ func (webserver *Webserver) HandleGitHubRequests(c *gin.Context) {
 }
 
 func (webserver *Webserver) HandleGitHubIssueCommentPayload(payload roboat.GitHubIssueCommentPayload) error {
+
 	return nil
 }

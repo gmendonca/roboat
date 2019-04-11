@@ -13,4 +13,3 @@ func CommentOnGithubIssuet(client *github.Client, payload GithubIssueCommentPayl
 	)
 	return err
 }
-
